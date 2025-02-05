@@ -1,6 +1,6 @@
 # ✨ DealTracker - AI-Powered Price Comparison App ✨
 
-Welcome to **DealTracker**, an AI-powered price comparison app designed to revolutionize online shopping by helping users find the best deals across multiple e-commerce platforms in real time. 🛒💸
+Welcome to **DealTracker**, an AI-powered price comparison app designed to revolutionize online shopping by helping users find the best deals across multiple e-commerce platforms in real-time. 🛒💸
 
 ---
 
@@ -15,7 +15,6 @@ The app offers:
 - User-friendly design with advanced filtering and intuitive UI
 
 ---
-
 
 ## 📅 Day-by-Day Plan
 
@@ -68,3 +67,13 @@ The app offers:
 
 ---
 
+## 🔐 Security Best Practices
+
+To maintain the security and integrity of the application, follow these best practices:
+
+- **Environment Variables:** Store sensitive information (like API keys, OAuth credentials, and JWT secrets) in a `.env` file.  
+  Example `.env` file:
+  ```env
+  JWT_SECRET=your_jwt_secret_key
+  GOOGLE_OAUTH_CLIENT_ID=your_oauth_client_id
+  API_KEY=your_third_party_api_key
