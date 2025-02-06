@@ -1,0 +1,47 @@
+[
+    {
+      "id": 1,
+      "name": "Samsung Galaxy S21",
+      "price": 799.99,
+      "rating": 4.5,
+      "brand": "Samsung",
+      "description": "High-performance smartphone with 120Hz display and 5G support.",
+      "platform": "Amazon",
+      "link": "https://www.amazon.com/product-example",
+      "imageUrl": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 2,
+      "name": "Dell XPS 13",
+      "price": 1299.99,
+      "rating": 4.7,
+      "brand": "Dell",
+      "description": "Ultra-thin, lightweight laptop with a stunning InfinityEdge display.",
+      "platform": "Flipkart",
+      "link": "https://www.flipkart.com/product-example",
+      "imageUrl": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 3,
+      "name": "Sony WH-1000XM4",
+      "price": 349.99,
+      "rating": 4.8,
+      "brand": "Sony",
+      "description": "Industry-leading noise-canceling headphones with long battery life.",
+      "platform": "Snapdeal",
+      "link": "https://www.snapdeal.com/product-example",
+      "imageUrl": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 4,
+      "name": "Apple iPhone 13",
+      "price": 999.99,
+      "rating": 4.6,
+      "brand": "Apple",
+      "description": "The latest iPhone model with A15 Bionic chip and advanced camera system.",
+      "platform": "Amazon",
+      "link": "https://www.amazon.com/product-example",
+      "imageUrl": "https://via.placeholder.com/150"
+    }
+  ]
+  
