@@ -1,25 +1,25 @@
 meta {
-  name: Add product
+  name: User update the product
   type: http
-  seq: 5
+  seq: 6
 }
 
-post {
-  url: http://localhost:5000/api/products
+put {
+  url: http://localhost:5000/api/products/67a5988e94ed025b06be7f45
   body: json
   auth: none
 }
 
 headers {
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2E1OTc2Mjk0ZWQwMjViMDZiZTdmM2QiLCJpYXQiOjE3Mzg5MDYzODYsImV4cCI6MTczODkwOTk4Nn0.xNvUktk2cm8aqlZ2WkF9EfkGq2-21jdKHjtxRjkLnCo
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2E1OTc2Mjk0ZWQwMjViMDZiZTdmM2QiLCJpYXQiOjE3Mzg5MjA1NjEsImV4cCI6MTczODkyNDE2MX0.ZpS3bP-Zutsg1UrXYn4UCTuUD1dzno-7nC2wf-IE_uk
 }
 
 body:json {
   {
     "name": "Samsung Galaxy S12",
     "price": 399.99,
-    "rating": 3.5,
-    "brand": "Samsung",
+    "rating": 4.5,
+    "brand": "Flipkart",
     "description": "High-performance smartphone with 120Hz display and 4G support.",
     "platform": "Amazon",
     "link": "https://www.amazon.com/product-example",
