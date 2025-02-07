@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Product = require('../models/ProductModel');
 
 // Get Products
@@ -31,6 +32,11 @@ const createProduct = async (req, res) => {
 // Update 
 const updateProduct = async (req, res) => {
   const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid product ID format' });
+  }
+
   const { name, price, rating, brand, description, platform, link, imageUrl } = req.body;
 
   try {
@@ -49,7 +55,6 @@ const updateProduct = async (req, res) => {
     res.status(400).json({ message: 'Error updating product', error: error.message });
   }
 };
-
 
 
 
