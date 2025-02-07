@@ -32,16 +32,16 @@ const productSchema = new mongoose.Schema({
      type: String,
      required: true,
      validate: {
-       validator: (v) => /^https?:\/\/[^\s$.?#].[^\s]*$/.test(v),
-       message: (props) => `${props.value} is not a valid URL`,
-     },
+      validator: (v) => /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(v),
+      message: (props) => `${props.value} is not a valid URL`,
+    },
   },
   imageUrl: {
      type: String,
      required: true,
      validate: {
-      validator: (v) => /^https?:\/\/[^\s$.?#].[^\s]*$/.test(v),
-      message: (props) => `${props.value} is not a valid image URL`,
+      validator: (v) => /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(v),
+      message: (props) => `${props.value} is not a valid Image URL`,
     },
   },
 },
