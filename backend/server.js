@@ -19,6 +19,10 @@ app.use(express.json());
 app.use('/api/products', productRoutes);
 app.use('/api', apiRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Welcome to DealTracker - Your AI-Powered Price Comparison App!');
+});
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong', error: err.message });
