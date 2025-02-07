@@ -1,0 +1,29 @@
+meta {
+  name: Add product
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:5000/api/products
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2E0ZTM0ZmQ4NWIzN2UwOWQ0ZmYwOGMiLCJpYXQiOjE3Mzg4NjA4NjEsImV4cCI6MTczODg2NDQ2MX0.m4JMH8_bYPxot6wwX1CTm5WF7it26FeFDv6wivTBNUQ
+}
+
+body:json {
+  {
+    "name": "Samsung Galaxy S21",
+    "price": 799.99,
+    "rating": 4.5,
+    "brand": "Samsung",
+    "description": "High-performance smartphone with 120Hz display and 5G support.",
+    "platform": "Amazon",
+    "link": "https://www.amazon.com/product-example",
+    "imageUrl": "https://via.placeholder.com/150"
+  }
+  
+}

@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./db/database');
 const productRoutes = require('./routes/productRoutes');
+const apiRoutes = require('./routes/apiRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,7 +16,8 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api', productRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api', apiRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
