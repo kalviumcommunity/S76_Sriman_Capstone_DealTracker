@@ -77,3 +77,8 @@ To maintain the security and integrity of the application, follow these best pra
   JWT_SECRET=your_jwt_secret_key
   GOOGLE_OAUTH_CLIENT_ID=your_oauth_client_id
   API_KEY=your_third_party_api_key
+
+  ## Deployment
+### Backend
+The backend of this project is deployed and can be accessed at:
+[Deployed Backend Link](https://s76-srimanh-capstone-dealtracker.onrender.com/)
