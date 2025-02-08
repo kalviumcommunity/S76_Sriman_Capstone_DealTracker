@@ -8,9 +8,9 @@ const getProducts = async (req, res) => {
     const products = await Product.find();
     res.status(200).json(products);
   } catch (error) {
+    console.error('Error fetching products:', error); 
     res.status(500).json({ 
-      message: 'Error fetching products', 
-      error: error.message 
+      message: 'Failed to fetch products. Please try again later.' 
     });
   }
 };
@@ -31,9 +31,9 @@ const createProduct = async (req, res) => {
     await newProduct.save();
     res.status(201).json(newProduct);
   } catch (error) {
+    console.error('Error creating product:', error); 
     res.status(400).json({ 
-      message: 'Error creating product', 
-      error: error.message 
+      message: 'Invalid product data. Please check your input.' 
     });
   }
 };
