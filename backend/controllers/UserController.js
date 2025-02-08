@@ -55,7 +55,6 @@ const purchaseProduct = async (req, res) => {
   try {
     const { userId, productId } = req.body;
 
-    // Find user and product
     const user = await User.findById(userId);
     const product = await Product.findById(productId);
 
@@ -63,16 +62,26 @@ const purchaseProduct = async (req, res) => {
       return res.status(404).json({ message: 'User or Product not found' });
     }
 
-    // Add product to user's purchased products
+    if (user.purchasedProducts.includes(productId)) {
+      return res.status(400).json({ message: 'Product already purchased' });
+    }
+
     user.purchasedProducts.push(product._id);
     await user.save();
 
-    res.status(200).json({ message: 'Product successfully added to user', user });
+    res.status(200).json({ 
+      message: 'Product purchased successfully', 
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        purchasedProducts: user.purchasedProducts 
+      },
+      purchasedProductDetails: product
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error purchasing product', error: error.message });
   }
 };
-
-
 
 module.exports = { registerUser, loginUser ,purchaseProduct};
