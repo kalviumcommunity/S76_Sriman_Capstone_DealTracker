@@ -7,4 +7,5 @@ router.get('/', getProducts);
 router.post('/', authMiddleware, createProduct);
 router.put('/:id', authMiddleware, updateProduct);
 
+
 module.exports = router; 
