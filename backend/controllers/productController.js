@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
 const Product = require('../models/ProductModel');
 
+
 // Get Products
 const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching products', error: error.message });
+    console.error('Error fetching products:', error); 
+    res.status(500).json({ 
+      message: 'Failed to fetch products. Please try again later.' 
+    });
   }
 };
 
@@ -17,7 +21,9 @@ const createProduct = async (req, res) => {
 
 
   if (!name || !price || !description || !imageUrl) {
-    return res.status(400).json({ message: 'Please provide all required fields (name, price, description, imageUrl).' });
+    return res.status(400).json({ 
+      message: 'Please provide all required fields (name, price, description, imageUrl).'
+     });
   }
 
   try {
@@ -25,7 +31,10 @@ const createProduct = async (req, res) => {
     await newProduct.save();
     res.status(201).json(newProduct);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating product', error: error.message });
+    console.error('Error creating product:', error); 
+    res.status(400).json({ 
+      message: 'Invalid product data. Please check your input.' 
+    });
   }
 };
 
