@@ -78,7 +78,12 @@ To maintain the security and integrity of the application, follow these best pra
   GOOGLE_OAUTH_CLIENT_ID=your_oauth_client_id
   API_KEY=your_third_party_api_key
 
-  ## Deployment
+## Deployment
+
 ### Backend
 The backend of this project is deployed and can be accessed at:
 [Deployed Backend Link](https://s76-srimanh-capstone-dealtracker.onrender.com/)
+
+### Frontend
+The Frontend of this project is deployed and can be accessed at:
+[Deployed Frontned Link](https://strong-brigadeiros-847d99.netlify.app/)
