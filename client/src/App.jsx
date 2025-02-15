@@ -5,6 +5,7 @@ import Hero from './pages/Home';
 import Features from './components/FeatureCard';
 import Footer from './components/Footer';
 import TrackProduct from "./pages/TrackProduct"
+import NotFound from './pages/NotFound';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<><Hero /><Features /></>} />
             <Route path="/track" element={<TrackProduct />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
         <Footer />
