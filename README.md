@@ -87,3 +87,7 @@ The backend of this project is deployed and can be accessed at:
 ### Frontend
 The Frontend of this project is deployed and can be accessed at:
 [Deployed Frontned Link](https://strong-brigadeiros-847d99.netlify.app/)
+
+### Design 
+The Dessign of this project:
+[Design Prototype Link](https://www.figma.com/proto/etwzVuiRJczUhBsr2s4wg9/DealTacker?node-id=1-2&p=f&t=N264o7bgYb44S6er-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2)
