@@ -9,6 +9,7 @@ import productImage from "../images/dummy.png";
 const TrackProduct = () => {
     return (
       <div className="flex flex-col gap-16 mb-20 relative">
+         {/* Background Images */}
         <Suspense fallback={<div className='text-white'>Loading...</div>}>
           <img
             src={image2}
@@ -60,13 +61,14 @@ const TrackProduct = () => {
             </div>
           </div>
         </Suspense>
+        {/* Search and Filters Section */}
         <div className="w-full max-w-3xl mx-auto mt-8">
           <h2 className="text-white text-center mb-4">What are you looking for?</h2>
           <div className="relative">
             <input
               type="text"
               placeholder="What are you looking for?"
-              className="w-full p-4 pl-12 rounded-full bg-[#2A2A4D] bg-opacity-40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AA3BA]"
+              className="w-full p-4 pl-12 rounded-full bg-[#000000] bg-opacity-40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AA3BA]"
             />
             <svg 
               className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -77,6 +79,7 @@ const TrackProduct = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
+          {/* Filter Buttons */}
           <div className="flex gap-4 justify-center mt-6">
             <button className="px-6 py-2 rounded-full bg-[#2A2A4D] bg-opacity-40 text-white hover:bg-opacity-60">
               Price ▼
@@ -88,6 +91,7 @@ const TrackProduct = () => {
               Discount Offers ▼
             </button>
           </div>
+           {/* Product Grid */}
           <div className="grid grid-cols-2 gap-6 mt-8">
             {[1, 2, 3, 4].map((item) => (
               <div key={item} className="bg-[#5C6394] bg-opacity-40 rounded-lg p-4">
