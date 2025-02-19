@@ -3,8 +3,8 @@ const Product = require('../models/ProductModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-// Register User
-const registerUser = async (req, res) => {
+ // Register User
+ const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
@@ -21,7 +21,6 @@ const registerUser = async (req, res) => {
     res.status(500).json({ message: 'Registration failed', error: error.message });
   }
 };
-
 
 // Login User
 const loginUser = async (req, res) => {
@@ -50,8 +49,6 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: "Login failed", error: error.message });
   }
 };
-
-
 
 const purchaseProduct = async (req, res) => {
   try {

@@ -5,6 +5,7 @@ const connectDB = require('./db/database');
 const productRoutes = require('./routes/productRoutes');
 const apiRoutes = require('./routes/apiRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+
 const path = require('path');
 
 const app = express();

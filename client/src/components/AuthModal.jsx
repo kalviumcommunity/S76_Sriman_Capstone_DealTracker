@@ -7,7 +7,8 @@ const AuthModal = ({ isOpen, onClose, setUser }) => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  
+  
   if (!isOpen) return null;
 
   const handleChange = (e) => {
@@ -24,7 +25,7 @@ const AuthModal = ({ isOpen, onClose, setUser }) => {
         const res = await axios.post("http://localhost:5001/api/login", {
           email: formData.email,
           password: formData.password,
-        });
+        } );
 
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify({ name: res.data.name, email: res.data.email }));
