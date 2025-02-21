@@ -65,7 +65,8 @@ app.get(
       // Redirect to frontend with token
       res.redirect(`http://localhost:5173/auth-success?token=${token}`);
     } catch (error) {
-      console.error("Google Auth Error:", error);
+      console.error("Google Auth Error:", error.message); 
+      res.status(500).json({ error: "Authentication failed. Please try again." });
       res.redirect("/");
     }
   }

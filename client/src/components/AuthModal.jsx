@@ -27,7 +27,7 @@ const AuthModal = ({ isOpen, onClose, setUser }) => {
 
     try {
       if (isLogin) {
-        const res = await axios.post("http://localhost:5001/api/login", {
+        const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login`, {
           email: formData.email,
           password: formData.password,
         });
@@ -40,7 +40,7 @@ const AuthModal = ({ isOpen, onClose, setUser }) => {
         onClose();
         navigate("/track");
       } else {
-        await axios.post("http://localhost:5001/api/register", formData);
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/register`, formData);
         alert("Registration Successful! Please log in.");
         setIsLogin(true);
       }
