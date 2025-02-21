@@ -11,9 +11,15 @@ const userSchema = new mongoose.Schema({
         required: true, 
         unique: true 
     },
-    password: { 
-        type: String, 
-        required: true 
+    password: {
+      type: String,
+      required: function () {
+        return !this.isGoogleUser;
+      },
+    },
+    isGoogleUser: {
+      type: Boolean,
+      default: false, 
     },
     purchasedProducts: [{ 
       type: mongoose.Schema.Types.ObjectId, 
@@ -32,3 +38,5 @@ userSchema.pre('save', async function (next) {
 });
 
 module.exports = mongoose.model('User', userSchema);
+
+

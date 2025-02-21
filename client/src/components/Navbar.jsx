@@ -1,5 +1,6 @@
-import  React ,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import image from "../images/Ellipse 2.png";
 import AuthModal from "./AuthModal.jsX";
 
@@ -9,12 +10,29 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
+  // 🔹 Fetch User Details if Token Exists
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserDetails(token);
     }
   }, []);
+
+  const fetchUserDetails = async (token) => {
+    try {
+      const res = await axios.get("http://localhost:5001/api/user/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.data.name) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+        setUser(res.data);
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+      handleLogout(); // If error, clear user session
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -41,7 +59,7 @@ const Navbar = () => {
 
           {user ? (
             <div className="relative">
-              {/* User Profile Button */}
+              {/* 🔹 Profile Button (No Username) */}
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center bg-gray-700 px-4 py-2 rounded-full focus:outline-none"
@@ -56,10 +74,10 @@ const Navbar = () => {
                 </svg>
               </button>
 
-              {/* Dropdown */}
+              {/* 🔹 Dropdown: Username Only Visible When Clicked */}
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white text-black shadow-lg rounded-lg p-2">
-                  <p className="px-4 py-2">{user.name}</p>
+                  <p className="px-4 py-2 font-semibold">{user.name}</p>
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
@@ -84,7 +102,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Auth Modal */}
+      {/* 🔹 Auth Modal */}
       <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} setUser={setUser} />
     </div>
   );
