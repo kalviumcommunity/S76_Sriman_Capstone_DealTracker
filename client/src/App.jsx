@@ -1,11 +1,41 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './pages/Home';
 import Features from './components/FeatureCard';
 import Footer from './components/Footer';
 import TrackProduct from "./pages/TrackProduct";
 import NotFound from './pages/NotFound';
+import EnterUserName from './components/AuthSuccess';
+import ProtectedRoute from "./components/ProtectedRoute";
+
+const AuthSuccess = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (token) {
+      localStorage.setItem("token", token);
+      fetchUserDetails(token);
+    }
+
+    navigate("/");
+  }, []);
+
+  const fetchUserDetails = async (token) => {
+    const res = await fetch("http://localhost:5001/api/user/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    localStorage.setItem("user", JSON.stringify(data));
+  };
+
+  return <p>Authenticating...</p>;
+};
 
 const App = () => {
   return (
@@ -33,10 +63,22 @@ const App = () => {
             <Route path="/" element={<><Hero /><Features /></>} />
             
             {/* Track Product Page */}
-            <Route path="/track" element={<TrackProduct />} />
+            <Route
+              path="/track"
+              element={
+                <ProtectedRoute>
+                  <TrackProduct />
+                </ProtectedRoute>
+              }
+            />
             
+            {/* Google Auth Success Route */}
+            <Route path="/auth-success" element={<AuthSuccess />} />
+
             {/* 404 Not Found Page */}
             <Route path="*" element={<NotFound />} />
+
+             <Route path="/enter-username" element={<EnterUserName />} /> 
           </Routes>
         </div>
         
