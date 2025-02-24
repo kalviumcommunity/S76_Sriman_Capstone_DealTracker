@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
   },
   { timestamps: true }
   );
-  
+
 // Hash the password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
@@ -37,6 +37,5 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-module.exports = mongoose.model('User', userSchema);
-
-
+// Prevent OverwriteModelError
+module.exports = mongoose.models.User || mongoose.model('User', userSchema);

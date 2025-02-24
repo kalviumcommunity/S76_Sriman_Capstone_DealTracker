@@ -3,9 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import image from "../images/Ellipse 2.png";
 import AuthModal from "./AuthModal.jsX";
-
+import Dashboard from "../pages/Dashboard";
 const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -79,6 +80,12 @@ const Navbar = () => {
                 <div className="absolute right-0 mt-2 w-48 bg-white text-black shadow-lg rounded-lg p-2">
                   <p className="px-4 py-2 font-semibold">{user.name}</p>
                   <button
+                    onClick={() => setIsDashboardOpen(true)}
+                    className="w-full text-left px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Dashboard
+                  </button>
+                  <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                   >
@@ -104,6 +111,7 @@ const Navbar = () => {
 
       {/* 🔹 Auth Modal */}
       <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} setUser={setUser} />
+      {isDashboardOpen && <Dashboard onClose={() => setIsDashboardOpen(false)} />}
     </div>
   );
 };

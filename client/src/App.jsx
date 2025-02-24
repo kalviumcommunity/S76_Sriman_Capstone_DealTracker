@@ -8,6 +8,8 @@ import TrackProduct from "./pages/TrackProduct";
 import NotFound from './pages/NotFound';
 import EnterUserName from './components/AuthSuccess';
 import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+
 
 const AuthSuccess = () => {
   const navigate = useNavigate();
@@ -79,6 +81,8 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
 
              <Route path="/enter-username" element={<EnterUserName />} /> 
+
+             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </div>
         

@@ -29,21 +29,24 @@ const productSchema = new mongoose.Schema({
     required: true 
   },
   link: {
-     type: String,
-     required: true,
-     validate: {
-      validator: (v) => /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(v),
+    type: String,
+    required: true,
+    validate: {
+      validator: (v) =>
+        /^(https?|ftp):\/\/((([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])*)\.)+[a-zA-Z]{2,}|\d{1,3}(\.\d{1,3}){3}|localhost)(:\d+)?(\/[^\s]*)?$/i.test(v),
       message: (props) => `${props.value} is not a valid URL`,
     },
   },
   imageUrl: {
-     type: String,
-     required: true,
-     validate: {
-      validator: (v) => /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(v),
-      message: (props) => `${props.value} is not a valid Image URL`,
+      type: String,
+      required: [true, 'Image URL is required']
     },
-  },
+    userId: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User', 
+      required: true 
+    }
+
 },
 { timestamps: true }
 );
