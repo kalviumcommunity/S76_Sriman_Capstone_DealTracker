@@ -160,27 +160,20 @@ const Dashboard = ({ onClose }) => {
   
     try {
       const newProductData = new FormData();
-      
-      // Log the actual userId being sent
-      console.log("Creating product with userId:", userId);
+      // Add userId to the form data
       newProductData.append("userId", userId);
       
-      // Log each field being added to FormData
+      // Add rest of the form data
       Object.keys(formData).forEach(key => {
-        console.log(`Adding ${key}:`, formData[key]);
         newProductData.append(key, formData[key]);
       });
   
       if (selectedImage) {
-        console.log("Adding image file:", selectedImage.name);
         newProductData.append("image", selectedImage);
       }
-      
-      // Log the complete FormData contents
-      for (let pair of newProductData.entries()) {
-        console.log('FormData content:', pair[0], pair[1]);
-      }
   
+      console.log("Creating product for userId:", userId); 
+      
       const response = await axios.post(`http://localhost:5001/api/products`, newProductData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -188,43 +181,11 @@ const Dashboard = ({ onClose }) => {
         }
       });
   
-      console.log("Product creation response:", response.data);
-      
-      // Verify the created product has the correct userId
-      if (response.data.userId !== userId) {
-        console.warn("Created product userId mismatch!", {
-          expectedUserId: userId,
-          actualUserId: response.data.userId
-        });
-      }
-
-      // Add a longer delay and multiple fetch attempts
-      let attempts = 0;
-      const maxAttempts = 3;
-      
-      const fetchWithRetry = async () => {
-        try {
-          await fetchUserProducts();
-          const response = await axios.get(`http://localhost:5001/api/products/user/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          
-          if (response.data.length === 0 && attempts < maxAttempts) {
-            attempts++;
-            console.log(`Retry attempt ${attempts} of ${maxAttempts}`);
-            setTimeout(fetchWithRetry, 1000);
-          }
-        } catch (error) {
-          console.error("Error in retry fetch:", error);
-        }
-      };
-
-      await fetchWithRetry();
-
+      console.log("Product creation response:", response.data); 
+  
       alert("Product added successfully!");
+      fetchUserProducts(); 
       setView("list");
-      
-      // Reset form
       setFormData({
         name: "",
         price: "",
@@ -241,6 +202,7 @@ const Dashboard = ({ onClose }) => {
       alert("Error adding product. Please try again.");
     }
   };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       {/* Semi-transparent overlay */}
