@@ -47,14 +47,28 @@ const Dashboard = ({ onClose }) => {
 
   const fetchUserProducts = async () => {
     try {
+      console.log("Fetching products for userId:", userId);
+      console.log("Using token:", token?.substring(0, 20) + "..."); // Log partial token for verification
+      
       const response = await axios.get(`http://localhost:5001/api/products/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      
+      if (response.data.length === 0) {
+        console.log("No products found. Verify userId in database:", userId);
+      } else {
+        console.log("Fetched products:", response.data);
+      }
+      
       setProducts(response.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching products:", error.response?.data || error);
+      if (error.response?.status === 401) {
+        console.log("Authentication error - token may be invalid");
+      }
     }
   };
+  
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
@@ -72,7 +86,7 @@ const Dashboard = ({ onClose }) => {
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const file = e.dataTransfer.files[0];
     if (file && file.type.startsWith('image/')) {
       setSelectedImage(file);
@@ -141,11 +155,97 @@ const Dashboard = ({ onClose }) => {
     window.open(link, '_blank', 'noopener,noreferrer');
   };
 
+  const handleAddSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const newProductData = new FormData();
+      
+      // Log the actual userId being sent
+      console.log("Creating product with userId:", userId);
+      newProductData.append("userId", userId);
+      
+      // Log each field being added to FormData
+      Object.keys(formData).forEach(key => {
+        console.log(`Adding ${key}:`, formData[key]);
+        newProductData.append(key, formData[key]);
+      });
+  
+      if (selectedImage) {
+        console.log("Adding image file:", selectedImage.name);
+        newProductData.append("image", selectedImage);
+      }
+      
+      // Log the complete FormData contents
+      for (let pair of newProductData.entries()) {
+        console.log('FormData content:', pair[0], pair[1]);
+      }
+  
+      const response = await axios.post(`http://localhost:5001/api/products`, newProductData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+  
+      console.log("Product creation response:", response.data);
+      
+      // Verify the created product has the correct userId
+      if (response.data.userId !== userId) {
+        console.warn("Created product userId mismatch!", {
+          expectedUserId: userId,
+          actualUserId: response.data.userId
+        });
+      }
+
+      // Add a longer delay and multiple fetch attempts
+      let attempts = 0;
+      const maxAttempts = 3;
+      
+      const fetchWithRetry = async () => {
+        try {
+          await fetchUserProducts();
+          const response = await axios.get(`http://localhost:5001/api/products/user/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          
+          if (response.data.length === 0 && attempts < maxAttempts) {
+            attempts++;
+            console.log(`Retry attempt ${attempts} of ${maxAttempts}`);
+            setTimeout(fetchWithRetry, 1000);
+          }
+        } catch (error) {
+          console.error("Error in retry fetch:", error);
+        }
+      };
+
+      await fetchWithRetry();
+
+      alert("Product added successfully!");
+      setView("list");
+      
+      // Reset form
+      setFormData({
+        name: "",
+        price: "",
+        rating: "",
+        brand: "",
+        description: "",
+        platform: "",
+        link: "",
+      });
+      setSelectedImage(null);
+      setPreviewUrl(null);
+    } catch (error) {
+      console.error("Error adding product:", error.response?.data || error);
+      alert("Error adding product. Please try again.");
+    }
+  };
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       {/* Semi-transparent overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={onClose} />
-      
+
       {/* Main content */}
       <div className="relative bg-white rounded-lg w-3/4 h-4/5 flex shadow-lg">
         {/* Sidebar */}
@@ -165,7 +265,7 @@ const Dashboard = ({ onClose }) => {
         {/* Main content area */}
         <div className="w-3/4 p-6 overflow-y-auto bg-gray-50 rounded-r-lg">
           {(view === "add" || view === "edit") && (
-            <form onSubmit={view === "add" ? handleUpdateSubmit : handleUpdateSubmit} className="space-y-6">
+            <form onSubmit={view === "add" ? handleAddSubmit : handleUpdateSubmit} className="space-y-6">
               <div 
                 className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer bg-white"
                 onDragOver={handleDragOver}
@@ -179,7 +279,7 @@ const Dashboard = ({ onClose }) => {
                   accept="image/*"
                   onChange={handleImageSelect}
                 />
-                
+
                 {previewUrl ? (
                   <div className="relative">
                     <img src={previewUrl} alt="Preview" className="max-h-48 mx-auto rounded" />
@@ -214,7 +314,7 @@ const Dashboard = ({ onClose }) => {
                   />
                 ))}
               </div>
-              
+
               <button 
                 className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors"
                 type="submit"

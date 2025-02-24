@@ -7,38 +7,45 @@ const fs = require('fs');
 
 // Configure multer for file upload
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     const uploadDir = 'uploads/';
-    // Create uploads directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
     cb(null, uploadDir);
   },
-  filename: function(req, file, cb) {
-    // Create unique filename with timestamp
+  filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-// File filter to accept only images
+// File filter to validate image type
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+  if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Not an image! Please upload only images.'), false);
+    cb(new Error('Invalid file type! Only JPEG, PNG, GIF, and WEBP are allowed.'), false);
   }
 };
 
-// Configure multer upload
+// Configure multer with storage, file filter, and file size limit
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: {
-    fileSize: 5 * 1024 * 1024 
-  }
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
+
+// Middleware to handle file upload errors
+const handleUploadError = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ error: err.message });
+  } else if (err) {
+    return res.status(400).json({ error: err.message });
+  }
+  next();
+};
 
 // Get all products
 const getProducts = async (req, res) => {
@@ -86,6 +93,7 @@ const createProduct = async (req, res) => {
 
     // Basic validation
     if (!name || !price || !description) {
+      // Delete uploaded file if validation fails
       fs.unlinkSync(req.file.path);
       return res.status(400).json({ 
         message: 'Please provide all required fields (name, price, description).' 
@@ -104,12 +112,13 @@ const createProduct = async (req, res) => {
       imageUrl,
       userId
     });
-
+    app.use(handleUploadError);
     // Save product
     await newProduct.save();
     res.status(201).json(newProduct);
 
   } catch (error) {
+    // Delete uploaded file if save fails
     if (req.file) {
       fs.unlinkSync(req.file.path);
     }
@@ -120,59 +129,60 @@ const createProduct = async (req, res) => {
   }
 };
 
+
+
 // Update Product
 const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user ? req.user.userId : null;
+  const userId = req.user.userId; // `authenticateUser` ensures this exists
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: 'Invalid product ID format' });
   }
 
   try {
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).lean();
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    // Ensure the logged-in user is the owner of the product
+    // Ensure only the owner can update the product
     if (product.userId.toString() !== userId) {
       return res.status(403).json({ message: 'Unauthorized: You can only update your own products' });
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true
+    }).lean();
 
     res.status(200).json({ message: 'Product updated successfully', updatedProduct });
   } catch (error) {
-    res.status(400).json({ message: 'Error updating product', error: error.message });
+    res.status(500).json({ message: 'Error updating product', error: error.message });
   }
 };
 
 // Delete Product
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user ? req.user.userId : null;
+  const userId = req.user.userId; // `authenticateUser` ensures this exists
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: 'Invalid product ID' });
   }
 
   try {
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).lean();
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    // Ensure the logged-in user is the owner of the product
+    // Ensure only the owner can delete the product
     if (product.userId.toString() !== userId) {
       return res.status(403).json({ message: 'Unauthorized: You can only delete your own products' });
     }
 
-    // If product has an image, delete it from filesystem
+    // Delete product image if it exists
     if (product.imageUrl) {
       const imagePath = product.imageUrl.split('/uploads/')[1];
       if (imagePath) {
@@ -183,12 +193,13 @@ const deleteProduct = async (req, res) => {
       }
     }
 
-    await product.deleteOne();
+    await Product.findByIdAndDelete(id);
     res.status(200).json({ message: 'Product deleted successfully' });
   } catch (error) {
-    res.status(400).json({ message: 'Error deleting product', error: error.message });
+    res.status(500).json({ message: 'Error deleting product', error: error.message });
   }
 };
+
 
 module.exports = {
   upload: upload.single('image'),
