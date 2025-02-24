@@ -6,24 +6,39 @@ meta {
 
 post {
   url: http://localhost:5001/api/products
-  body: json
+  body: multipartForm
   auth: none
 }
 
+params:query {
+  : 
+}
+
 headers {
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2I5YTRkMzhmMjZhMDVlYTNhNjYzYWUiLCJpYXQiOjE3NDAzODIyMTksImV4cCI6MTc0MDM4NTgxOX0.07JS_idlJ0ZNbp62lnA_yT2P1--ZVmz7Gqiwj4MTNIc
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2JjNTg0OTE0YzZmYmU5NmIwNjMxZTQiLCJpYXQiOjE3NDA0MTIzNDQsImV4cCI6MTc0MDQxNTk0NH0.K7CbB4pIR-XZlb_NxBfc-eBSpSNDjHqKlU_HlI_HrnI
 }
 
 body:json {
   {
-     "name": "sony XPS 13",
+     "name": "samsung XPS 13",
         "price": 12299.99,
         "rating": 4.7,
-        "brand": "Dell ",
+        "brand": "samsung ",
         "description": "Ultra-thin, lightweight laptop with a stunning InfinityEdge display , good.",
         "platform": "Flipkart, Apple",
         "link": "https://www.flipkart.com/product-example",
         "imageUrl": "https://via.placeholder.com/150"
   }
   
+}
+
+body:multipart-form {
+  image: @file(C:\Users\TechD\Desktop\figma\ass -1.jpeg)
+  name: samsung galary 15
+  price: 12222.1
+  rating: 4
+  brand: samsung
+  description: Ultra-thin, lightweight laptop with a stunning InfinityEdge display
+  platform: snapdeal
+  link: https://www.flipkart.com/product-example
 }

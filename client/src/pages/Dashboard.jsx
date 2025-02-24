@@ -158,89 +158,58 @@ const Dashboard = ({ onClose }) => {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
   
-    try {
-      const newProductData = new FormData();
-      
-      // Log the actual userId being sent
-      console.log("Creating product with userId:", userId);
-      newProductData.append("userId", userId);
-      
-      // Log each field being added to FormData
-      Object.keys(formData).forEach(key => {
-        console.log(`Adding ${key}:`, formData[key]);
-        newProductData.append(key, formData[key]);
-      });
+    const maxRetries = 3; // Define the number of retries
+    let attempt = 0;
+    let success = false;
   
-      if (selectedImage) {
-        console.log("Adding image file:", selectedImage.name);
-        newProductData.append("image", selectedImage);
-      }
-      
-      // Log the complete FormData contents
-      for (let pair of newProductData.entries()) {
-        console.log('FormData content:', pair[0], pair[1]);
-      }
+    const newProductData = new FormData();
+    newProductData.append("userId", userId);
+    Object.keys(formData).forEach(key => newProductData.append(key, formData[key]));
+    if (selectedImage) newProductData.append("image", selectedImage);
   
-      const response = await axios.post(`http://localhost:5001/api/products`, newProductData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+    while (attempt < maxRetries && !success) {
+      try {
+        console.log(`Attempt ${attempt + 1}: Creating product for userId:`, userId);
   
-      console.log("Product creation response:", response.data);
-      
-      // Verify the created product has the correct userId
-      if (response.data.userId !== userId) {
-        console.warn("Created product userId mismatch!", {
-          expectedUserId: userId,
-          actualUserId: response.data.userId
-        });
-      }
-
-      // Add a longer delay and multiple fetch attempts
-      let attempts = 0;
-      const maxAttempts = 3;
-      
-      const fetchWithRetry = async () => {
-        try {
-          await fetchUserProducts();
-          const response = await axios.get(`http://localhost:5001/api/products/user/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          
-          if (response.data.length === 0 && attempts < maxAttempts) {
-            attempts++;
-            console.log(`Retry attempt ${attempts} of ${maxAttempts}`);
-            setTimeout(fetchWithRetry, 1000);
+        const response = await axios.post(`http://localhost:5001/api/products`, newProductData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
           }
-        } catch (error) {
-          console.error("Error in retry fetch:", error);
+        });
+  
+        console.log("Product creation response:", response.data);
+  
+        alert("Product added successfully!");
+        fetchUserProducts();
+        setView("list");
+        setFormData({
+          name: "",
+          price: "",
+          rating: "",
+          brand: "",
+          description: "",
+          platform: "",
+          link: "",
+        });
+        setSelectedImage(null);
+        setPreviewUrl(null);
+        success = true;
+      } catch (error) {
+        attempt++;
+        console.error(`Error adding product (Attempt ${attempt}):`, error.response?.data || error);
+  
+        if (attempt < maxRetries) {
+          console.warn(`Retrying... (${attempt}/${maxRetries})`);
+          await new Promise(res => setTimeout(res, 2000)); // Wait before retrying
+        } else {
+          alert("Error adding product after multiple attempts. Please check your network and try again.");
         }
-      };
-
-      await fetchWithRetry();
-
-      alert("Product added successfully!");
-      setView("list");
-      
-      // Reset form
-      setFormData({
-        name: "",
-        price: "",
-        rating: "",
-        brand: "",
-        description: "",
-        platform: "",
-        link: "",
-      });
-      setSelectedImage(null);
-      setPreviewUrl(null);
-    } catch (error) {
-      console.error("Error adding product:", error.response?.data || error);
-      alert("Error adding product. Please try again.");
+      }
     }
   };
+  
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       {/* Semi-transparent overlay */}
