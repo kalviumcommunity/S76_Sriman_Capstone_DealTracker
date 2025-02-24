@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const urlRegex = /^(https?|ftp):\/\/((([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])*)\.)+[a-zA-Z]{2,63}|\d{1,3}(\.\d{1,3}){3}|localhost)(:\d+)?(\/[^\s]*)?(\?[^\s]*)?(#[^\s]*)?$/i;
+
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -33,8 +35,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Product link is required'],
       validate: {
-        validator: (v) =>
-          /^(https?|ftp):\/\/((([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])*)\.)+[a-zA-Z]{2,}|\d{1,3}(\.\d{1,3}){3}|localhost)(:\d+)?(\/[^\s]*)?$/i.test(v),
+        validator: (v) =>urlRegex.test(v),
         message: (props) => `${props.value} is not a valid URL`
       }
     },

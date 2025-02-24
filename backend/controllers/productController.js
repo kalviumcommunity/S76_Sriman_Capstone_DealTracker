@@ -7,7 +7,7 @@ const fs = require('fs');
 
 // Configure multer for file upload
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     const uploadDir = 'uploads/';
     // Create uploads directory if it doesn't exist
     if (!fs.existsSync(uploadDir)) {
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     }
     cb(null, uploadDir);
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     // Create unique filename with timestamp
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
@@ -27,7 +27,7 @@ const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);
   } else {
-    cb(new Error('Not an image! Please upload only images.'), false);
+    cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE', 'Not an image! Please upload only images.'));
   }
 };
 
@@ -40,6 +40,19 @@ const upload = multer({
   }
 });
 
+// Middleware to handle upload errors
+const uploadHandler = (req, res, next) => {
+  upload.single('file')(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      // Multer-specific errors (e.g., file too large, invalid file type)
+      return res.status(400).json({ error: err.message });
+    } else if (err) {
+      // General errors
+      return res.status(500).json({ error: 'File upload failed. Please try again.' });
+    }
+    next();
+  });
+};
 // Get all products
 const getProducts = async (req, res) => {
   try {
@@ -195,6 +208,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   upload: upload.single('image'),
   getProducts,
+  uploadHandler,
   getUserProducts,
   createProduct,
   updateProduct,
