@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import image from "../images/SliderComponent-1.png"
-import google from "../images/google.png"
+import image from "../images/SliderComponent-1.png";
+import google from "../images/google.png";
 
 const AuthModal = ({ isOpen, onClose, setUser }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,7 +10,7 @@ const AuthModal = ({ isOpen, onClose, setUser }) => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  
+
   if (!isOpen) return null;
 
   const handleChange = (e) => {
@@ -33,8 +33,7 @@ const AuthModal = ({ isOpen, onClose, setUser }) => {
         });
 
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify({ name: res.data.name, email: res.data.email }));
-
+        localStorage.setItem("user", JSON.stringify({ name: res.data.name, email: res.data.email, userId: res.data.userId }));
         setUser({ name: res.data.name, email: res.data.email });
         alert("Login Successful!");
         onClose();
@@ -52,33 +51,24 @@ const AuthModal = ({ isOpen, onClose, setUser }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="relative z-50 bg-white rounded-3xl shadow-xl w-[800px] h-[600px] flex overflow-hidden rounded-bl-[120px]">
-        {/* Left Side - Illustration with adjusted spacing and curves */}
+        {/* Left Side - Illustration */}
         <div className="w-[42%] h-full pl-3 pt-3 pb-3">
           <div className="relative h-full w-full">
-            <div className="absolute inset-0 bg-[#7CC9D6] rounded-tl-2xl rounded-tr-md rounded-br-3xl rounded-bl-[100px]">
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                <img 
-                  src={image} 
-                  alt="Shopping Illustration" 
-                  className="w-full h-auto object-contain"
-                />
-              </div>
+            <div className="absolute inset-0 bg-[#7CC9D6] rounded-tl-2xl rounded-tr-md rounded-br-3xl rounded-bl-[100px] flex items-center justify-center p-8">
+              <img src={image} alt="Shopping Illustration" className="w-full h-auto object-contain" />
             </div>
           </div>
         </div>
 
         {/* Right Side - Form */}
-        <div className="w-[58%] px-14 py-12">
-          <button 
-            onClick={onClose} 
-            className="absolute top-6 right-6 text-gray-400 hover:text-gray-600"
-          >
+        <div className="w-[58%] px-14 py-12 relative">
+          <button onClick={onClose} className="absolute top-6 right-6 text-gray-400 hover:text-gray-600">
             ✕
           </button>
 
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold mb-3">WELCOME BACK</h2>
-            <p className="text-gray-600">Welcome back! Please enter your details.</p>
+            <h2 className="text-3xl font-bold mb-3">{isLogin ? "WELCOME BACK" : "CREATE ACCOUNT"}</h2>
+            <p className="text-gray-600">{isLogin ? "Welcome back! Please enter your details." : "Sign up to get started."}</p>
           </div>
 
           {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -124,47 +114,25 @@ const AuthModal = ({ isOpen, onClose, setUser }) => {
 
             <div className="flex items-center justify-between">
               <label className="flex items-center cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  className="mr-2"
-                  checked={showPassword}
-                  onChange={(e) => setShowPassword(e.target.checked)}
-                />
-                <span className="text-sm text-gray-600">Remember me</span>
+                <input type="checkbox" className="mr-2" checked={showPassword} onChange={(e) => setShowPassword(e.target.checked)} />
+                <span className="text-sm text-gray-600">Show password</span>
               </label>
-              <button type="button" className="text-sm text-gray-600 hover:underline">
-                Forgot password
-              </button>
+              <button type="button" className="text-sm text-gray-600 hover:underline">Forgot password?</button>
             </div>
 
-            <button
-              type="submit"
-              className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600"
-            >
-              Sign in
+            <button type="submit" className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600">
+              {isLogin ? "Sign in" : "Sign up"}
             </button>
 
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              className="w-full border border-gray-300 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50"
-            >
-              <img
-                src={google}
-                alt="Google"
-                className="w-5 h-5"
-              />
-              Sign in with Google
+            <button type="button" onClick={handleGoogleLogin} className="w-full border border-gray-300 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50">
+              <img src={google} alt="Google" className="w-5 h-5" />
+              {isLogin ? "Sign in with Google" : "Sign up with Google"}
             </button>
 
             <p className="text-sm text-center">
-              Don&apos;t have an account?{" "}
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-red-500 hover:underline"
-              >
-                Sign up for free!
+              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-red-500 hover:underline">
+                {isLogin ? "Sign up for free!" : "Sign in"}
               </button>
             </p>
           </form>
