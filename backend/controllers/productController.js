@@ -36,7 +36,7 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 5 * 1024 * 1024 
   }
 });
 
@@ -44,10 +44,8 @@ const upload = multer({
 const uploadHandler = (req, res, next) => {
   upload.single('file')(req, res, (err) => {
     if (err instanceof multer.MulterError) {
-      // Multer-specific errors (e.g., file too large, invalid file type)
       return res.status(400).json({ error: err.message });
     } else if (err) {
-      // General errors
       return res.status(500).json({ error: 'File upload failed. Please try again.' });
     }
     next();

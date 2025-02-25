@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-console.log("JWT Secret in authController:", process.env.JWT_SECRET); 
-
 const generateToken = (user) => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log("🔐 Generating Token for User ID:", user._id);
+  }
+  
   return jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
