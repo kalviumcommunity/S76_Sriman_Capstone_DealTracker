@@ -158,7 +158,7 @@ const Dashboard = ({ onClose }) => {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
   
-    const maxRetries = 3; // Define the number of retries
+    const maxRetries = 3; 
     let attempt = 0;
     let success = false;
   
