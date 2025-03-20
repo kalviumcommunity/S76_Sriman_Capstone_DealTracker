@@ -129,6 +129,10 @@ app.get('/api/products/user/:userId', authMiddleware, async (req, res) => {
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "healthy" });
+});
+
 // Routes
 app.use('/api/products', productRoutes);
 app.use('/api', apiRoutes);
