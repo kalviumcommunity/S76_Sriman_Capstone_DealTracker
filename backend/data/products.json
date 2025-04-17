@@ -1,47 +1,69 @@
 [
-    {
-      "id": 1,
-      "name": "Samsung Galaxy S21",
-      "price": 799.99,
-      "rating": 4.5,
-      "brand": "Samsung",
-      "description": "High-performance smartphone with 120Hz display and 5G support.",
-      "platform": "Amazon",
-      "link": "https://www.amazon.com/product-example",
-      "imageUrl": "https://via.placeholder.com/150"
-    },
-    {
-      "id": 2,
-      "name": "Dell XPS 13",
-      "price": 1299.99,
-      "rating": 4.7,
-      "brand": "Dell",
-      "description": "Ultra-thin, lightweight laptop with a stunning InfinityEdge display.",
-      "platform": "Flipkart",
-      "link": "https://www.flipkart.com/product-example",
-      "imageUrl": "https://via.placeholder.com/150"
-    },
-    {
-      "id": 3,
-      "name": "Sony WH-1000XM4",
-      "price": 349.99,
-      "rating": 4.8,
-      "brand": "Sony",
-      "description": "Industry-leading noise-canceling headphones with long battery life.",
-      "platform": "Snapdeal",
-      "link": "https://www.snapdeal.com/product-example",
-      "imageUrl": "https://via.placeholder.com/150"
-    },
-    {
-      "id": 4,
-      "name": "Apple iPhone 13",
-      "price": 999.99,
-      "rating": 4.6,
-      "brand": "Apple",
-      "description": "The latest iPhone model with A15 Bionic chip and advanced camera system.",
-      "platform": "Amazon",
-      "link": "https://www.amazon.com/product-example",
-      "imageUrl": "https://via.placeholder.com/150"
-    }
-  ]
-  
+  {
+    "id": 1,
+    "name": "Samsung Galaxy S21",
+    "price": 799.99,
+    "rating": 4.5,
+    "brand": "Samsung",
+    "description": "High-performance smartphone with 120Hz display and 5G support.",
+    "platform": "Amazon",
+    "link": "https://www.amazon.com/product-example",
+    "imageUrl": "data:image/jpeg;base64,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",
+    "comparison": [
+      {
+        "platform": "Amazon",
+        "price": 799.99,
+        "discount": 10,
+        "rating": 4.5,
+        "link": "https://www.amazon.com/product-example"
+      },
+      {
+        "platform": "Flipkart",
+        "price": 789.99,
+        "discount": 12,
+        "rating": 4.4,
+        "link": "https://www.flipkart.com/product-example"
+      },
+      {
+        "platform": "Snapdeal",
+        "price": 810.99,
+        "discount": 8,
+        "rating": 4.3,
+        "link": "https://www.snapdeal.com/product-example"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Dell XPS 13",
+    "price": 1299.99,
+    "rating": 4.7,
+    "brand": "Dell",
+    "description": "Ultra-thin, lightweight laptop with a stunning InfinityEdge display.",
+    "platform": "Flipkart",
+    "link": "https://www.flipkart.com/product-example",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 3,
+    "name": "Sony WH-1000XM4",
+    "price": 349.99,
+    "rating": 4.8,
+    "brand": "Sony",
+    "description": "Industry-leading noise-canceling headphones with long battery life.",
+    "platform": "Snapdeal",
+    "link": "https://www.snapdeal.com/product-example",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 4,
+    "name": "Apple iPhone 13",
+    "price": 699.99,
+    "rating": 4.6,
+    "brand": "Apple",
+    "description": "The latest iPhone model with A15 Bionic chip and advanced camera system.",
+    "platform": "Amazon",
+    "link": "https://www.amazon.com/product-example",
+    "imageUrl": "https://via.placeholder.com/150"
+  }
+]

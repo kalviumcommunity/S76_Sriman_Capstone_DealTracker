@@ -74,7 +74,26 @@ const getUserProducts = async (req, res) => {
   }
 };
 
+const getAllProducts = async (req, res) => {
+  try {
+    // Fetch products from the database
+    const dbProducts = await Product.find();
+
+    // Fetch products from products.json
+    const jsonFilePath = path.join(__dirname, '../data/products.json');
+    const jsonProducts = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+
+    // Combine both arrays
+    const allProducts = [...dbProducts, ...jsonProducts];
+
+    res.status(200).json(allProducts);
+  } catch (error) {
+    console.error('Error fetching all products:', error);
+    res.status(500).json({ message: 'Failed to fetch all products. Please try again later.' });
+  }
+};
 // Create product
+
 const createProduct = async (req, res) => {
   try {
     // Get user ID from authenticated user
@@ -210,5 +229,6 @@ module.exports = {
   getUserProducts,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  getAllProducts
 };
