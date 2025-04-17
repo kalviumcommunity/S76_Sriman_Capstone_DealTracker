@@ -205,7 +205,7 @@ const TrackProduct = () => {
       <div className="relative">
         <Suspense fallback={<div className="text-white">Loading...</div>}>
         <img
-          src={product.imageUrl || {noImage}}
+          src={product.imageUrl || noImage}
           alt={product.name}
           className="h-48 w-full object-cover rounded-lg mb-4"
         />

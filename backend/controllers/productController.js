@@ -79,9 +79,10 @@ const getAllProducts = async (req, res) => {
     // Fetch products from the database
     const dbProducts = await Product.find();
 
-    // Fetch products from products.json
+    // Fetch products from products.json using async read
     const jsonFilePath = path.join(__dirname, '../data/products.json');
-    const jsonProducts = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+    const fileContent = await fs.promises.readFile(jsonFilePath, 'utf-8');
+    const jsonProducts = JSON.parse(fileContent);
 
     // Combine both arrays
     const allProducts = [...dbProducts, ...jsonProducts];
