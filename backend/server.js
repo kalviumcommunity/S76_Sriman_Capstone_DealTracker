@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./db/database');
+const axios = require("axios");
 const productRoutes = require('./routes/productRoutes');
 const apiRoutes = require('./routes/apiRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
@@ -21,7 +22,13 @@ const PORT = process.env.PORT || 5001;
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Replace with your frontend URL
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(
   session({
@@ -96,7 +103,7 @@ app.post('/api/auth/google-register', async (req, res) => {
     res.json({ token });
   } catch (error) {
     console.error('Google Register Error:', error);
-    res.status(500).json({ message: 'Error registering user', error: error.message });
+    res.status(500).json({ message: 'Error registering user ', error: error.message });
   }
 });
 
@@ -132,6 +139,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "healthy" });
 });
+
 
 // Routes
 app.use('/api/products', productRoutes);
